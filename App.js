@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  StatusBar
 } from 'react-native'
 
 export default class App extends React.Component {
@@ -65,6 +66,13 @@ export default class App extends React.Component {
     var { err, wind, temp, title, condition } = this.state
     return (
       <View style={styles.container}>
+        <StatusBar
+          backgroundColor='blue'
+          barStyle='light-content'
+        />
+        <View style={{ top: 0, height: 60, left: 0, right: 0, backgroundColor: 'steelblue', alignItems: 'center', position: 'absolute' }}>
+          <Text style={{ color: 'white', fontSize: 20, top: 30 }}>#Wuzizthaweatr</Text>
+        </View>
         <Text style={{fontSize: 30}}>{ title }</Text>
         <Text style={{fontSize: 20}}>{ condition }</Text>
         <Text style={{fontSize: 25}}>{ temp }</Text>
@@ -72,8 +80,8 @@ export default class App extends React.Component {
         <Button
           title='Update'
           onPress={() => {
-            this.updatePosition();
-            this.updateWeather();
+            this.updatePosition()
+            this.updateWeather()
           }}
           style={styles.updateBtn}
         />
