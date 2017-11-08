@@ -14,7 +14,7 @@ export default class App extends React.Component {
       latitude: null,
       longitude: null,
       err: null,
-      wind: null,
+      wind: '',
       temp: null,
       title: null,
       condition: '',
@@ -22,10 +22,46 @@ export default class App extends React.Component {
     }
     this.updatePosition = this.updatePosition.bind(this)
     this.updateWeather = this.updateWeather.bind(this)
+    this.weatherIcon = this.weatherIcon.bind(this)
+    this.windIcon = this.windIcon.bind(this)
   }
 
   componentWillMount () {
     this.updatePosition()
+  }
+
+  weatherIcon () {
+    var { condition } = this.state
+    if (condition === 'clear sky') {
+      return '☀️'
+    } else if (condition === 'few clouds') {
+      return '⛅️'
+    } else if (condition === 'scattered clouds') {
+      return '☁️'
+    } else if (condition === 'broken clouds') {
+      return '🌥'
+    } else if (condition === 'shower rain') {
+      return '🌧'
+    } else if (condition === 'rain') {
+      return '☔️'
+    } else if (condition === 'thunderstorm') {
+      return '🌩'
+    } else if (condition === 'snow') {
+      return '🌨'
+    } else if (condition === 'mist') {
+      return '🌫'
+    }
+  }
+
+  windIcon () {
+    var wind = parseInt(this.state.wind)
+    if (wind < 5) {
+      return '🌬 ' + wind + ' m/s'
+    } else if ( wind > 5 && wind <= 12) {
+      return '💨 ' + wind + ' m/s'
+    } else {
+      return '🌪 ' + wind + ' m/s'
+    }
   }
 
   updateWeather () {
@@ -36,9 +72,9 @@ export default class App extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
-          temp: responseJson.main.temp + ' Celcius',
-          condition: responseJson.weather[0].main,
-          wind: responseJson.wind.speed + ' m/s',
+          temp: responseJson.main.temp,
+          condition: responseJson.weather[0].description,
+          wind: responseJson.wind.speed,
           title: responseJson.name,
           fetchingLocation: false
         })
@@ -71,12 +107,12 @@ export default class App extends React.Component {
           barStyle='light-content'
         />
         <View style={{ top: 0, height: 60, left: 0, right: 0, backgroundColor: 'steelblue', alignItems: 'center', position: 'absolute' }}>
-          <Text style={{ color: 'white', fontSize: 20, top: 30 }}>#Wuzizthaweatr</Text>
+          <Text style={{ color: 'white', fontSize: 20, top: 30 }}>#Wuzizthaweatr⛅️</Text>
         </View>
+        <Text style={{fontSize: 100}}>{ this.weatherIcon() }</Text>
         <Text style={{fontSize: 30}}>{ title }</Text>
-        <Text style={{fontSize: 20}}>{ condition }</Text>
-        <Text style={{fontSize: 25}}>{ temp }</Text>
-        <Text style={{fontSize: 15}}>{ wind }</Text>
+        <Text style={{fontSize: 25}}>{ temp ? parseInt(temp) + ' Celcius' : null }</Text>
+        <Text style={{fontSize: 20}}>{ wind ? this.windIcon() : null}</Text>
         <Button
           title='Update'
           onPress={() => {
