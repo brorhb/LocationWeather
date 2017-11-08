@@ -66,7 +66,7 @@ export default class App extends React.Component {
 
   updateWeather () {
     var { latitude, longitude } = this.state
-    var apikey = '1c6ddc6035ecb402404030304be16638'
+    var apikey = '704198f1ff5f3d9c74f7fad88549cd40'
     var endpoint = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + apikey + '&units=metric'
     return fetch(endpoint)
       .then((response) => response.json())
