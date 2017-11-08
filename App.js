@@ -29,7 +29,7 @@ export default class App extends React.Component {
 
   updateWeather () {
     var { latitude, longitude } = this.state
-    var apikey = ''
+    var apikey = '1c6ddc6035ecb402404030304be16638'
     var endpoint = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + apikey + '&units=metric'
     return fetch(endpoint)
       .then((response) => response.json())
@@ -48,7 +48,7 @@ export default class App extends React.Component {
   }
 
   updatePosition () {
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.watchPosition(
       (position) => {
         this.setState({
           latitude: position.coords.latitude,
@@ -71,7 +71,10 @@ export default class App extends React.Component {
         <Text style={{fontSize: 15}}>{ wind }</Text>
         <Button
           title='Update'
-          onPress={() => this.updateWeather()}
+          onPress={() => {
+            this.updatePosition();
+            this.updateWeather();
+          }}
           style={styles.updateBtn}
         />
         { err ? <Text>Error {err}</Text> : null }
